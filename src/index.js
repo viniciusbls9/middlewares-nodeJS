@@ -24,7 +24,14 @@ function checksExistsUserAccount(request, response, next) {
 }
 
 function checksCreateTodosUserAvailability(request, response, next) {
+  const { user } = request
 
+  const userTodoQtd = user.todos.length
+
+  if (userTodoQtd > 10 || !user.pro) {
+    return response.status(403).json({ error: "User not available to create a new todo" })
+  }
+  return next()
 }
 
 function checksTodoExists(request, response, next) {
