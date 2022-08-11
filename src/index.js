@@ -35,7 +35,19 @@ function checksCreateTodosUserAvailability(request, response, next) {
 }
 
 function checksTodoExists(request, response, next) {
+  const { username } = request.headers
+  const { id } = request.params
 
+  const getUserByUsername = users.find(user => user.username === username)
+  const getTodoById = getUserByUsername.todos.find(todo => todo.id === id)
+
+  if (!getUserByUsername) {
+    return response.status(404).json({ error: "User not found!" })
+  }
+
+  request.todo = getTodoById
+  request.user = getUserByUsername
+  return next()
 }
 
 function findUserById(request, response, next) {
