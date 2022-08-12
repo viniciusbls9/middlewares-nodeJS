@@ -39,7 +39,7 @@ function checksTodoExists(request, response, next) {
   const { id } = request.params
 
   const getUserByUsername = users.find(user => user.username === username)
-  const getTodoById = getUserByUsername.todos.find(todo => todo.id === id)
+  const getTodoById = getUserByUsername?.todos?.find(todo => todo.id === id)
   const validateUuid = validate(id)
 
   if (!getUserByUsername) {
