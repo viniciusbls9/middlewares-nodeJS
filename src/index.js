@@ -28,7 +28,7 @@ function checksCreateTodosUserAvailability(request, response, next) {
 
   const userTodoQtd = user.todos.length
 
-  if (userTodoQtd > 10 || !user.pro) {
+  if (userTodoQtd > 10 && !user.pro) {
     return response.status(403).json({ error: "User not available to create a new todo" })
   }
   return next()
@@ -40,9 +40,18 @@ function checksTodoExists(request, response, next) {
 
   const getUserByUsername = users.find(user => user.username === username)
   const getTodoById = getUserByUsername.todos.find(todo => todo.id === id)
+  const validateUuid = validate(id)
 
   if (!getUserByUsername) {
     return response.status(404).json({ error: "User not found!" })
+  }
+
+  if (validateUuid && !getTodoById) {
+    return response.status(404).json({ error: "Todo not found!" })
+  }
+
+  if (!validateUuid) {
+    return response.status(400).json({ error: "Id isn't uuid!" })
   }
 
   request.todo = getTodoById
@@ -51,7 +60,16 @@ function checksTodoExists(request, response, next) {
 }
 
 function findUserById(request, response, next) {
-  // Complete aqui
+  const { id } = request.params
+  const getUserById = users.find(user => user.id === id)
+
+  if (!getUserById) {
+    return response.status(404).json({ error: "User not found!" })
+  }
+
+  request.user = getUserById
+
+  return next()
 }
 
 app.post('/users', (request, response) => {
