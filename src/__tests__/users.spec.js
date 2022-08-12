@@ -43,22 +43,22 @@ describe('Users', () => {
     expect(response.body.error).toBeTruthy();
   });
 
-  // it('should be able to show user data', async () => {
-  //   const { body: userData } = await request(app)
-  //     .post('/users')
-  //     .send({
-  //       name: 'John Doe',
-  //       username: 'johndoe3'
-  //     });
+  it('should be able to show user data', async () => {
+    const { body: userData } = await request(app)
+      .post('/users')
+      .send({
+        name: 'John Doe',
+        username: 'johndoe3'
+      });
 
-  //   const response = await request(app)
-  //     .get(`/users/${userData.id}`);
+    const response = await request(app)
+      .get(`/users/${userData.id}`);
 
-  //   expect(response.body).toMatchObject({
-  //     name: 'John Doe',
-  //     username: 'johndoe3',
-  //     todos: [],
-  //     pro: false
-  //   })
-  // });
+    expect(response.body).toMatchObject({
+      name: 'John Doe',
+      username: 'johndoe3',
+      todos: [],
+      pro: false
+    })
+  });
 });
